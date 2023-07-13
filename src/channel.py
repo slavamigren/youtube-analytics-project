@@ -9,7 +9,7 @@ from functools import total_ordering
 class Channel:
     """Класс для ютуб-канала"""
 
-    YT_OBJ = None # YT object
+    YT_OBJ = None   # YT object
 
     def __init__(self, channel_id: str) -> None:
         """Экземпляр инициализируется id канала. Дальше все данные будут подтягиваться по API."""
@@ -87,31 +87,29 @@ class Channel:
 
 
     def __eq__(self, other):
+        """сравнивает количество подписчиков"""
         if not isinstance(other,type(self)):
             return NotImplemented
         return self._subscriber_count == other._subscriber_count
 
 
     def __gt__(self, other):
+        """сравнивает количество подписчиков"""
         if not isinstance(other,type(self)):
             return NotImplemented
         return self._subscriber_count > other._subscriber_count
 
 
     def __add__(self, other):
+        """складывает количества подписчиков экземпляров класса"""
         if not isinstance(other,type(self)):
             return NotImplemented
         return self._subscriber_count + other._subscriber_count
 
 
     def __sub__(self, other):
+        """вычитает количество подписчиков одного экземпляра класса из другого"""
         if not isinstance(other,type(self)):
             return NotImplemented
         return self._subscriber_count - other._subscriber_count
-
-
-if __name__ == '__main__':
-    moscowpython = Channel('UC-OVMPlMA3-YCIeg4z5z23A')
-#    moscowpython.print_info()
-    print(moscowpython.channel_id)
 
