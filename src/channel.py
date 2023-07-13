@@ -2,8 +2,10 @@ import json
 import os
 from googleapiclient.discovery import build
 import isodate
+from functools import total_ordering
 
 
+@total_ordering
 class Channel:
     """Класс для ютуб-канала"""
 
@@ -21,10 +23,10 @@ class Channel:
         self._channel_id = info['items'][0]['id']    # id of the channel
         self._title = info['items'][0]['snippet']['title']    # title of the channel
         self._description = info['items'][0]['snippet']['description']    # description of the channel
-        self._url = 'https://www.youtube.com/channel/' + info['items'][0]['snippet']['customUrl']    # url of the channel
-        self._subscriber_count = info['items'][0]['statistics']['subscriberCount']    # amount of subscribers
-        self._video_count = info['items'][0]['statistics']['videoCount']    # amount of videos
-        self._view_count = info['items'][0]['statistics']['viewCount']    # amount of views
+        self._url = 'https://www.youtube.com/channel/' + self._channel_id    # info['items'][0]['snippet']['customUrl']    # url of the channel
+        self._subscriber_count = int(info['items'][0]['statistics']['subscriberCount'])    # amount of subscribers
+        self._video_count = int(info['items'][0]['statistics']['videoCount'])    # amount of videos
+        self._view_count = int(info['items'][0]['statistics']['viewCount'])    # amount of views
 
 
     @property
@@ -80,16 +82,36 @@ class Channel:
             json.dump(self.__dict__, file, indent=2)
 
 
+    def __str__(self):
+        return f'{self._title} ({self._url})'
+
+
+    def __eq__(self, other):
+        if not isinstance(other,type(self)):
+            return NotImplemented
+        return self._subscriber_count == other._subscriber_count
+
+
+    def __gt__(self, other):
+        if not isinstance(other,type(self)):
+            return NotImplemented
+        return self._subscriber_count > other._subscriber_count
+
+
+    def __add__(self, other):
+        if not isinstance(other,type(self)):
+            return NotImplemented
+        return self._subscriber_count + other._subscriber_count
+
+
+    def __sub__(self, other):
+        if not isinstance(other,type(self)):
+            return NotImplemented
+        return self._subscriber_count - other._subscriber_count
+
 
 if __name__ == '__main__':
     moscowpython = Channel('UC-OVMPlMA3-YCIeg4z5z23A')
 #    moscowpython.print_info()
     print(moscowpython.channel_id)
-    print(moscowpython.title)
-    print(moscowpython.description)
-    print(moscowpython.url)
-    print(moscowpython.subscriber_count)
-    print(moscowpython.video_count)
-    print(moscowpython.view_count)
-    print(moscowpython.get_service())
-    moscowpython.to_json('moscowpython.json')
+
